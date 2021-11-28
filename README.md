@@ -40,4 +40,4 @@ They are saved in the form `image_name/image_name-${dimmension}.jpg`. e.g. `IMG_
 
 The original (not resized) image is saved as `image_name/image_name-original.jpg`. e.g. `IMG_123/IMG_123-original.jpg`
 
-If you'd like to change this pattern, adjust line 88 of [server.js](./server.js)
+If you'd like to change this pattern, adjust line 88 of [server.js](https://github.com/Ebonsignori/image-resize-upload-aws/blob/main/server.js#L88)
