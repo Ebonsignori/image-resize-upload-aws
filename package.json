@@ -1,0 +1,31 @@
+{
+  "name": "image-resize-upload-aws",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "open": "open-cli http://localhost:3005",
+    "start": "npm run open && node server.js",
+    "dev": "npm run open && nodemon server --watch client/index.handlebars --watch server.js --watch client/index.js"
+  },
+  "author": "Evan Bonsignori",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1037.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^10.0.0",
+    "exif-reader": "^1.0.3",
+    "express": "^4.16.3",
+    "handlebars": "^4.7.7",
+    "multer": "^1.4.3",
+    "sharp": "^0.29.3"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "7.23",
+    "eslint-plugin-github": "^4.2.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "nodemon": "^2.0.15",
+    "open-cli": "^7.0.1"
+  }
+}
