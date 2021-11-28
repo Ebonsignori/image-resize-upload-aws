@@ -128,7 +128,10 @@ app.post("/upload", upload.single("photo"), async (req, res) => {
             ContentType: "image/jpeg",
             ContentLanguage: "en-US",
             ACL: "public-read",
-            Metadata: req.body,
+            Metadata: {
+              ...req.body,
+              originalname: req.file.originalname,
+            },
           })
           .promise();
         uploadUrls.push(uploadRes.Location);
