@@ -34,6 +34,8 @@ Steps:
 1. `npm install`
 1. `npm start`
 
+You can see upload progress from the CLI running the server.
+
 Images are saved in `BUCKET_NAME`, one for each dimmension specified in `IMAGE_BREAKPOINTS`.
 
 They are saved in the form `image_name/image_name-${dimmension}.jpg`. e.g. `IMG_123/IMG_123-600.jpg`
