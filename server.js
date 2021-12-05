@@ -17,6 +17,7 @@ const upload = multer({ dest: uploadPath });
 
 const { PORT, IMAGE_BREAKPOINTS, AWS_ID, AWS_SECRET, BUCKET_NAME } =
   process.env;
+let { IMAGE_QUALITY } = process.env;
 
 const app = express();
 app.use(express.static(path.join(__dirname, "client")));
@@ -39,6 +40,12 @@ if (!BUCKET_NAME) {
   console.log("Please set your BUCKET_NAME in .env");
   process.exit(0);
 }
+if (!IMAGE_QUALITY) {
+  console.log("IMAGE_QUALITY not set in .env, defaulting to 90%");
+  IMAGE_QUALITY = "90";
+}
+
+console.log("Setting image quality to ", IMAGE_QUALITY);
 
 const s3 = new AWS.S3({
   accessKeyId: AWS_ID,
@@ -59,6 +66,7 @@ app.get("/", (req, res) => {
   res.send(
     pageTemplate({
       breakpoints: BREAKPOINTS,
+      imageQuality: IMAGE_QUALITY,
     })
   );
 });
@@ -71,6 +79,9 @@ app.post("/upload", upload.single("photo"), async (req, res) => {
   const isImage = req.file.mimetype.includes("image");
   if (!isImage) {
     return res.redirect(`/?error=${encodeURI("Not an image file")}`);
+  }
+  if (req.body["image-quality"]) {
+    IMAGE_QUALITY = parseInt(req.body["image-quality"], 10);
   }
 
   const imageName = req.body.ImageName;
@@ -85,9 +96,11 @@ app.post("/upload", upload.single("photo"), async (req, res) => {
   const uploadPromises = [...BREAKPOINTS, "original"].map(
     async (breakpoint) => {
       const isOriginal = breakpoint === "original";
-      const imagePattern = `${imageName}-${breakpoint}.jpg`;
+      const imagePattern = `${imageName}-${breakpoint}.webp`;
+      const originalPattern = `${imageName}-${breakpoint}.jpg`;
       const imageKey = `${imageName}/${imagePattern}`;
       const imagePath = path.join(imageDirectory, imagePattern);
+      const originalPath = path.join(imageDirectory, originalPattern);
       const existsInS3 = await s3
         .headObject({
           Bucket: BUCKET_NAME,
@@ -112,11 +125,14 @@ app.post("/upload", upload.single("photo"), async (req, res) => {
 
       try {
         if (isOriginal) {
-          await sharp(req.file.path).jpeg({ quality: 100 }).toFile(imagePath);
+          await sharp(req.file.path)
+            .withMetadata()
+            .jpeg({ quality: 100 })
+            .toFile(originalPath);
         } else {
           await sharp(req.file.path)
             .resize(breakpoint)
-            .jpeg({ quality: 90 })
+            .webp({ quality: parseInt(IMAGE_QUALITY, 10) })
             .toFile(imagePath);
         }
         const imageBuffer = fs.readFileSync(imagePath);
@@ -125,9 +141,11 @@ app.post("/upload", upload.single("photo"), async (req, res) => {
             Bucket: BUCKET_NAME,
             Key: imageKey,
             Body: imageBuffer,
-            ContentType: "image/jpeg",
+            ContentType: "image/webp",
             ContentLanguage: "en-US",
             ACL: "public-read",
+            // Cache "indefinetly"
+            CacheControl: "max-age: 31536000, immutable",
             Metadata: {
               ...req.body,
               originalname: req.file.originalname,

@@ -44,6 +44,14 @@
                     <hr />
 
                     <div class="input-group mt-3">
+                      <span class="input-group-text" id="longitude-text">Image Quality (percent)</span>
+                      <input id="image-quality" name="image-quality" type="text" class="form-control" aria-label="image-quality" aria-describedby="image-quality" type="number" min="1" max="100">
+                    </div>
+                    <small id="gps-help" class="form-text text-muted mt-5">Defaults to: {{ imageQuality }} set in your .env</small>
+
+                    <hr />
+
+                    <div class="input-group mt-3">
                       <input class="btn btn-secondary btn-lg" type="submit" value="Upload">
                     </div>
 

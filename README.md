@@ -1,6 +1,6 @@
 # Resize and Upload Image to AWS S3
 
-Web app intended to run locally used for resizing an image into responsive sizes set in `.env` and uploading them to an S3 bucket. 
+Web app intended to run locally used for resizing an image into responsive sizes set in `.env` and uploading them to an S3 bucketa in `webp` format. 
 
 Image EXIF metadata like GPS location, shutter speed, ISO, etc are included in the S3 upload as custom metadata tags.
 
@@ -38,8 +38,8 @@ You can see upload progress from the CLI running the server.
 
 Images are saved in `BUCKET_NAME`, one for each dimmension specified in `IMAGE_BREAKPOINTS`.
 
-They are saved in the form `image_name/image_name-${dimmension}.jpg`. e.g. `IMG_123/IMG_123-600.jpg`
+They are saved in the form `image_name/image_name-${dimmension}.webp`. e.g. `IMG_123/IMG_123-600.webp`
 
-The original (not resized) image is saved as `image_name/image_name-original.jpg`. e.g. `IMG_123/IMG_123-original.jpg`
+The original (not resized) image is saved as an uncompressed jpeg `image_name/image_name-original.jpg`. e.g. `IMG_123/IMG_123-original.jpg`
 
 If you'd like to change this pattern, adjust line 88 of [server.js](https://github.com/Ebonsignori/image-resize-upload-aws/blob/main/server.js#L88)
