@@ -145,7 +145,7 @@ app.post("/upload", upload.single("photo"), async (req, res) => {
             ContentLanguage: "en-US",
             ACL: "public-read",
             // Cache "indefinetly"
-            CacheControl: "max-age: 31536000, immutable",
+            CacheControl: "max-age: 31536000",
             Metadata: {
               ...req.body,
               originalname: req.file.originalname,

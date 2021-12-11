@@ -42,4 +42,6 @@ They are saved in the form `image_name/image_name-${dimmension}.webp`. e.g. `IMG
 
 The original (not resized) image is saved as an uncompressed jpeg `image_name/image_name-original.jpg`. e.g. `IMG_123/IMG_123-original.jpg`
 
-If you'd like to change this pattern, adjust line 88 of [server.js](https://github.com/Ebonsignori/image-resize-upload-aws/blob/main/server.js#L88)
+If you'd like to change this pattern, adjust line 99 of [server.js](https://github.com/Ebonsignori/image-resize-upload-aws/blob/main/server.js#L99)
+
+Each image is saved with a max-age cache control header of one year (effecively no-expire). If you plan on changing the image at any path you may want to shorten this.
